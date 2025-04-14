@@ -11,7 +11,7 @@ phases:
 
   build:
     commands:
-      - echo Building the Spring Boot app...
+      - echo Building Spring Boot app...
       - mvn clean package -DskipTests
       - echo Building Docker image...
       - docker build -t ansuman25/expense-tracker:1.0 .
@@ -19,7 +19,7 @@ phases:
   post_build:
     commands:
       - echo Logging in to Docker Hub...
-      - echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+      - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
       - echo Pushing Docker image...
       - docker push ansuman25/expense-tracker:1.0
 
