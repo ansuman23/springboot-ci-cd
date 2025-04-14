@@ -2,29 +2,20 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      java: corretto17
     commands:
-      - echo Installing Maven...
-      - mvn --version
       - echo Installing Docker...
       - curl -fsSL https://get.docker.com | sh
       - sudo service docker start
   build:
     commands:
-      - echo Building the Spring Boot app...
-      - mvn clean package -DskipTests
       - echo Building the Docker image...
       - docker build -t ansuman25/expense-tracker:1.0 .
   post_build:
     commands:
-      - echo Build completed.
       - echo Logging in to Docker Hub...
       - docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
-      - echo Pushing Docker image to Docker Hub...
       - docker push ansuman25/expense-tracker:1.0
-      - echo Build and push completed.
 
 artifacts:
   files:
-    - output/*.jar
+    - Dockerfile
