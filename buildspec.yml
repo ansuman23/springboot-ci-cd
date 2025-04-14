@@ -11,6 +11,8 @@ phases:
 
   build:
     commands:
+      - echo Changing to project directory...
+      - cd expense-tracker
       - echo Building Spring Boot app...
       - mvn clean package -DskipTests
       - echo Building Docker image...
@@ -25,4 +27,4 @@ phases:
 
 artifacts:
   files:
-    - target/*.jar
+    - expense-tracker/target/*.jar
