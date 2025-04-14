@@ -1,30 +1,10 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      java: corretto17
-    commands:
-      - echo Installing Docker...
-      - curl -fsSL https://get.docker.com | sh
-      - sudo service docker start
-
   build:
     commands:
-      - echo Changing to project directory...
-      - cd expense-tracker
-      - echo Building Spring Boot app...
-      - mvn clean package -DskipTests
-      - echo Building Docker image...
-      - docker build -t ansuman25/expense-tracker:1.0 .
-
-  post_build:
-    commands:
-      - echo Logging in to Docker Hub...
-      - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
-      - echo Pushing Docker image...
-      - docker push ansuman25/expense-tracker:1.0
+      - echo Skipping Docker build, image is already in Docker Hub.
 
 artifacts:
   files:
-    - expense-tracker/target/*.jar
+    - '**/*'
