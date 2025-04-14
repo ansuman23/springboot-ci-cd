@@ -1,17 +1,17 @@
-name: Build & Push Docker Image to ECR
+name: Build and Push Docker Image to ECR
 
 on:
   push:
     branches:
-      - main  # Only run on push to the main branch
+      - main  # Trigger on push to the main branch (you can change this)
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v2
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
@@ -19,13 +19,14 @@ jobs:
     - name: Log in to AWS ECR
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build Docker Image
-      run: docker build -t expense-tracker:1.0 .
-
-    - name: Tag Docker Image
+    - name: Build Docker image
       run: |
-        docker tag expense-tracker:1.0 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/expense-tracker:1.0
-
-    - name: Push Docker Image to ECR
+        docker build -t ${{ secrets.ECR_REPOSITORY_NAME }} .
+      
+    - name: Tag Docker image
       run: |
-        docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/expense-tracker:1.0
+        docker tag ${{ secrets.ECR_REPOSITORY_NAME }}:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY_NAME }}:latest
+
+    - name: Push Docker image to ECR
+      run: |
+        docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY_NAME }}:latest
